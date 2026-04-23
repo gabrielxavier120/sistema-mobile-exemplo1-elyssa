@@ -3,35 +3,57 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type Props = {
     label: string;
-    theme?: "primary";
+    theme?: "primary" | "green" | "red";
     onPress?: () => void;
 }
 
 export default function Button({ label, theme, onPress }: Props){
-    if(theme=== "primary"){
-        return(
-            <View style = {[styles.buttonContainer, {borderWidth: 4, borderColor: "#35389e", borderRadius: 18},]}>
-                <Pressable 
-                    style = {[styles.button, { backgroundColor: '#fff' }]}
-                    onPress={onPress}
-                >
-                    <FontAwesome name="picture-o" size={18} color="#25292e" style={styles.buttonIcon}/>               
-                    <Text style={[styles.buttonLabel, {color:"#25292e"}]}>{label}</Text>
-                </Pressable> 
-            </View>
-        )
-    };
-    
-    return(
-        <View style = {styles.buttonContainer}>
-            <Pressable 
-                style = {[styles.button, { backgroundColor: '#fff' }]}
-                onPress={onPress}
-            >
-                <Text style = {styles.buttonLabel}>{label}</Text>
-            </Pressable>
-        </View>
+  if(theme === "primary"){
+    return (
+      <View style = {[styles.buttonContainer, {borderWidth: 4, borderColor: "#35389e", borderRadius: 18},]}>
+        <Pressable 
+          style = {[styles.button, { backgroundColor: '#fff' }]}
+            onPress={onPress}
+        >
+          <FontAwesome name="picture-o" size={18} color="#25292e" style={styles.buttonIcon}/>               
+          <Text style={[styles.buttonLabel, {color:"#25292e"}]}>{label}</Text>
+        </Pressable> 
+      </View>
     );
+  } else if(theme === "green"){
+    return (
+      <View style = {[styles.smallButtonContainer]}>
+        <Pressable 
+          style = {[styles.button, { backgroundColor: '#77ec75' }]}
+            onPress={onPress}
+        >
+          <Text style={[styles.buttonLabel, {color:"#25292e"}]}>{label}</Text>
+        </Pressable> 
+      </View>
+    )  
+  } else if(theme === "red"){
+    return (
+      <View style = {[styles.smallButtonContainer]}>
+        <Pressable 
+          style = {[styles.button, { backgroundColor: '#red' }]}
+            onPress={onPress}
+        >
+          <Text style={[styles.buttonLabel, {color:"#25292e"}]}>{label}</Text>
+        </Pressable> 
+      </View>
+    )  
+  }
+    
+  return(
+    <View style = {styles.buttonContainer}>
+      <Pressable 
+        style = {[styles.button, { backgroundColor: '#fff' }]}
+        onPress={onPress}
+      >
+        <Text style = {styles.buttonLabel}>{label}</Text>
+      </Pressable>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
