@@ -35,13 +35,13 @@ export default function Button({ label, theme, onPress }: Props){
     return (
       <View style = {[styles.smallButtonContainer]}>
         <Pressable 
-          style = {[styles.button, { backgroundColor: '#red' }]}
+          style = {[styles.button, { backgroundColor: '#f74d5d' }]}
             onPress={onPress}
         >
           <Text style={[styles.buttonLabel, {color:"#25292e"}]}>{label}</Text>
-        </Pressable> 
+        </Pressable>
       </View>
-    )  
+    )
   }
     
   return(
@@ -73,6 +73,14 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         flexDirection: "row",
         backgroundColor: "#cbe4ef",
+    },
+    smallButtonContainer: {
+      width: 100,
+      height: 50,
+      marginHorizontal: 20,
+      alignItems: "center",
+      justifyContent: "center",
+      padding: 3,
     },
     buttonLabel:{
         color: "#393232",

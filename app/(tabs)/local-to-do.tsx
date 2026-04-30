@@ -129,9 +129,93 @@ export default function LocalToDo(){
     );
   }
   
+  return (
+    <View style={{ padding: 20, marginTop: 50 }}>
+      <Text style={styles.text}>
+        Tarefas
+      </Text>
+
+      <TextInput 
+        placeholder="Escreva uma tarefa"
+        value={title}
+        onChangeText={setTitle}
+        style={styles.input}
+      />
+      
+      <Button onPress={addNote} theme="primary" label="Nova" />
+
+      <FlatList 
+        data={notes}
+        keyExtractor={(item: Note) => item.id.toString()}
+        renderItem={({ item}) => {
+          const isEditing = editingId === item.id;
+
+          return (
+            <View>
+              {isEditing ? (
+                <>
+                  <TextInput value={editingText} onChangeText={setEditingText}
+                    style={styles.input}
+                  />
+                  <View style={{ flexDirection: "row", gap: 10 }}>
+                    <Button onPress={updateNote} theme="green" label="Salvar" />
+                    <Button 
+                      onPress={() => {
+                        setEditingId(null);
+                        setEditingText("");
+                      }}
+                      theme="red"
+                      label="Cancelar"
+                    />
+                  </View>
+                </>
+              ) : (
+                <>
+                  <Text style={styles.text}>
+                    {item.title}
+                  </Text>
+
+                  <Text
+                    style={[styles.text, { color: "#777" }]}
+                  >
+                    {formatDate(item.createdAt)}
+                  </Text>
+
+                  <View style={{ flexDirection: "row", gap: 10 }}>
+                    <Button 
+                      onPress={() => {
+                        setEditingId(item.id);
+                        setEditingText(item.title);
+                      }}
+                      theme="green"
+                      label="Editar"
+                    />
+                    <Button 
+                      onPress={() => deleteNote(item.id)}
+                      theme="red"
+                      label="Excluir"
+                    />
+                  </View>
+                </>
+              )}
+            </View>
+          );
+        }}
+      />
+    </View>
+  );
 
 }
 
 const styles = StyleSheet.create({
-  
+  container:{
+    flex:1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor:"#a5c9f4",
+  },
+
+  text:{
+    color: "#342323",
+  },
 });
