@@ -1,7 +1,16 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Tabs } from "expo-router";
+import { router } from 'expo-router';
+import { getAuth } from "firebase/auth";
+import Button from '../../Components/Button';
+import { auth } from '../../FirebaseConfig';
+
 
 export default function TabsLayout() {
+  getAuth().onAuthStateChanged((user) => {
+    if(!user) router.replace('/');
+  });
+
   return (
   <Tabs screenOptions={{tabBarActiveTintColor:
     "#a1a6ed", headerStyle:{
@@ -10,8 +19,9 @@ export default function TabsLayout() {
     headerShadowVisible:false,
     headerTintColor:'#fff',
     tabBarStyle:{
-        backgroundColor:'#214067',
+        backgroundColor:'#25292e',
     },
+    headerRight: () => <Button label="Sair" theme="red" onPress={() => auth.signOut()} />
   }}>
     <Tabs.Screen name="index"
       options = {{headerTitle: "Página inicial",
@@ -21,18 +31,16 @@ export default function TabsLayout() {
         ),  
         headerLeft: () => <></>}}
     />
-    <Tabs.Screen name="local-to-do"
-      options = {{headerTitle: "Tarefas Local", tabBarIcon: ({ focused, color}) => 
-        (<Ionicons name = {focused? 'checkmark-circle': 'checkmark-circle-outline'}
-          color = {color}
-          size = {24}
-        />)}}
-    />
+    
     <Tabs.Screen name="about" 
       options = {{headerTitle: "Sobre", tabBarIcon:({focused,color})=> (<Ionicons name = {focused? 'information-circle': 'information-circle-outline'}
         color = {color}
         size={24}/>)
       }}
+    />
+
+    <Tabs.Screen name="cloud-to-do"
+      options = {{headerTitle: "Tarefas"}}
     />
   </Tabs>
 

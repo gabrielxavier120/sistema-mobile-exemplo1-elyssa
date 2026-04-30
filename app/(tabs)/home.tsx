@@ -1,11 +1,11 @@
 import Button from "@/Components/Button";
 import ModalMenu from "@/Components/ModalMenu";
-import DropdownComponent from "@/Components/Dropdown";
+//import DropdownComponent from "@/Components/Dropdown";
 import * as ImagePicker from 'expo-image-picker';
 import { useState, useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import ImageViewer from "../../Components/ImageViewer";
-import * as SQLite from 'expo-sqlite';
+//import * as SQLite from 'expo-sqlite';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -53,44 +53,11 @@ export default function Index() {
     setIsModalVisible(false);
   }
 
-
-  useEffect(() => {
-    async function setUp(){
-      const db = await SQLite.openDatabaseAsync('database');
-
-      await db.execAsync(`PRAGMA journal_mode = WAL;
-        CREATE TABLE IF NOT EXISTS cor (id TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL);`);
-
-        try{
-          await db.runAsync('INSERT INTO cor (id, value) VALUES ("SelectedColor", "#fffeff")');
-        } catch{
-          console.log("Erro de inserção");
-        }
-    }
-    setUp();
-  }, []);
-
   const backgroundColor = useSharedValue("white");
-
-  const getSelectedColor = async () => {
-    const db = await SQLite.openDatabaseAsync('database');
-    try{
-       const SavedColor: {
-        value: string;
-       }[] = await db.getAllAsync("SELECT value FROM cor WHERE id = 'SelectedColor'");
-
-       backgroundColor.value = SavedColor[0].value;
-    } catch{
-      console.log("Erro ao ler dado");
-    }
-  }
 
   const animatedStyles = useAnimatedStyle(() => ({
     backgroundColor: withTiming(backgroundColor.value, { duration: 400 }),
   }));
-
-
-  getSelectedColor();
 
   return (
     <Animated.View style= {[styles.container, animatedStyles]}>
@@ -108,14 +75,6 @@ export default function Index() {
           onPress={onModalOpen}
           label="Cheque sua lista"/>
       </View>
-      <ModalMenu
-        isVisible={isModalVisible}
-        onClose={onModalClose}
-      >
-        <View>
-          <DropdownComponent data={data} saveAt="SavedColor" onChoose={getSelectedColor}></DropdownComponent>
-        </View>
-      </ModalMenu>
     </Animated.View>
   );
 }
