@@ -1,4 +1,5 @@
 import Button from '@/Components/Button';
+import Checkbox from '@/Components/Checkbox';
 import { db } from '@/FirebaseConfig';
 import { getAuth } from 'firebase/auth';
 import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
@@ -20,6 +21,7 @@ export default function CloudToDo(){
         if(user){
             const q = query(todosCollection, where("userId", "==", user.uid));
             const data = await getDocs(q);
+            console.log("Dados:" + data);
             setNotes(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
         } else{
             console.log("O usuário não está logado");
@@ -54,6 +56,15 @@ export default function CloudToDo(){
         await deleteDoc(todoDoc);
         fetchNotes();
     };
+
+    const editStateTask = async (id: string, currentState: boolean) => {
+        if(!db) return;
+
+        const todoDoc = doc(db, 'todos', id);
+        await updateDoc(todoDoc, { completed: !currentState });
+
+        fetchNotes();
+    }
 
 
     const formatDate = (iso: string) => {
@@ -106,15 +117,22 @@ export default function CloudToDo(){
                                         </>
                                     ) : (
                                         <>
-                                            <Text style={styles.text}>
-                                                {item.title}
-                                            </Text>
+                                            <View style={{ flexDirection: "row", alignItems: "center", gap: 15, marginBottom: 10 }}>
+                                                <Checkbox
+                                                    checked={item.completed}
+                                                    onPress={() => editStateTask(item.id, item.completed)}
+                                                />
 
-                                            <Text
-                                                style={[styles.text, { color: "#777"}]}
-                                            >
-                                                {formatDate(item.createdAt)}
-                                            </Text>
+                                                <Text style={styles.text}>
+                                                    {item.title}
+                                                </Text>
+
+                                                <Text
+                                                    style={[styles.text, { color: "#777"}]}
+                                                >
+                                                    {formatDate(item.createdAt)}
+                                                </Text>
+                                            </View>
 
                                             <View style={{ flexDirection: "row", gap: 10 }}>
                                                 <Button
@@ -184,15 +202,22 @@ export default function CloudToDo(){
                                     </>
                                 ) : (
                                     <>
-                                        <Text style={styles.text}>
-                                            {item.title}
-                                        </Text>
+                                        <View style={{ flexDirection: "row", alignItems: "center", gap: 15, marginBottom: 10 }}>
+                                            <Checkbox
+                                                checked={item.completed}
+                                                onPress={() => editStateTask(item.id, item.completed)}
+                                            />
 
-                                        <Text
-                                            style={[styles.text, { color: "#777"}]}
-                                        >
-                                            {formatDate(item.createdAt)}
-                                        </Text>
+                                            <Text style={styles.text}>
+                                                {item.title}
+                                            </Text>
+
+                                            <Text
+                                                style={[styles.text, { color: "#777"}]}
+                                            >
+                                                {formatDate(item.createdAt)}
+                                            </Text>
+                                        </View>
 
                                         <View style={{ flexDirection: "row", gap: 10 }}>
                                             <Button

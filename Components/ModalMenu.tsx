@@ -13,7 +13,7 @@ export default function ModalMenu({ isVisible, children, onClose }: Props){
             <Modal animationType="slide" transparent={true} visible={isVisible}>
                 <View style={styles.modalContent}>
                     <View style={styles.titleContainer}>
-                        <Text style={styles.title}>Gerencie suas tarefas</Text>
+                        <Text style={styles.title}>Gerencie suas cores</Text>
                         <Pressable onPress={onClose}>
                             <MaterialIcons name="close" color='#fff' size={22} />
                         </Pressable>
@@ -27,9 +27,9 @@ export default function ModalMenu({ isVisible, children, onClose }: Props){
 
 const styles = StyleSheet.create({
     modalContent: {
-        height: '75%',
+        height: '65%',
         width: '100%',
-        backgroundColor: '#25292e',
+        backgroundColor: '#214067',
         borderTopRightRadius: 18,
         borderTopLeftRadius: 18,
         position: 'absolute',
@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
     },
     titleContainer: {
         height: '16%',
-        backgroundColor: '#464C55',
         borderTopRightRadius: 10,
         borderTopLeftRadius: 10,
         paddingHorizontal: 20,

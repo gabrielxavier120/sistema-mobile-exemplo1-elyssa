@@ -49,13 +49,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: "center",
-        backgroundColor: "#25292e",
+        backgroundColor: "#214067",
     },
     title: {
         fontSize: 28,
         marginBottom: 40,
         color: '#e7e8fcff',
-        flex:0.1
+        flex: 0.1
     },
     textInput: {
         backgroundColor: '#FFFFFF',

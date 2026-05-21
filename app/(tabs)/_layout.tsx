@@ -13,14 +13,14 @@ export default function TabsLayout() {
 
   return (
     <Tabs screenOptions={{
-      tabBarActiveTintColor: "#a1a6ed", 
+      tabBarActiveTintColor: "#fffeff", 
       headerStyle: {
         backgroundColor:'#214067'
       },
       headerShadowVisible: false,
       headerTintColor: '#fff',
       tabBarStyle: {
-        backgroundColor:'#25292e',
+        backgroundColor:'#214067',
       },
       headerRight: () => <Button label="Sair" theme="red" onPress={() => auth.signOut()} />
     }}>

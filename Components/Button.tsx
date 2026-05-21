@@ -10,7 +10,7 @@ type Props = {
 export default function Button({ label, theme, onPress }: Props){
   if(theme === "primary"){
     return (
-      <View style = {[styles.buttonContainer, {borderWidth: 4, borderColor: "#35389e", borderRadius: 18},]}>
+      <View style = {[styles.buttonContainer, {borderWidth: 4, borderColor: "#214067", borderRadius: 18},]}>
         <Pressable 
           style = {[styles.button, { backgroundColor: '#fff' }]}
             onPress={onPress}

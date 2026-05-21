@@ -1,11 +1,12 @@
+import { db } from '@/FirebaseConfig';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import Button from "@/Components/Button";
 import ModalMenu from "@/Components/ModalMenu";
-//import DropdownComponent from "@/Components/Dropdown";
+import DropdownComponent from "@/Components/Dropdown";
 import * as ImagePicker from 'expo-image-picker';
 import { useState, useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import ImageViewer from "../../Components/ImageViewer";
-//import * as SQLite from 'expo-sqlite';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -15,6 +16,25 @@ import Animated, {
 const PlaceholderImage = require("../../assets/images/icon.png");
 
 export default function Index() {
+  useEffect(() => {
+    async function setUp(){
+      try{
+        const corDocRef = doc(db, 'cores', 'SelectedColor');
+
+        const corSnap = await getDoc(corDocRef);
+        if(!corSnap.exists()){
+          await setDoc(corDocRef, { value: '#fffeff' });
+        }
+      } catch(error){
+        console.log("Erro de inicialização do Firebase - ", error);
+      }
+    }
+
+    setUp();
+  }, []);
+
+  const backgroundColor = useSharedValue("white");
+
   const data = [
     { label: 'Rosa', value: '#edb8d4' },
     { label: 'Azul', value: '#a5c9f4' },
@@ -29,6 +49,22 @@ export default function Index() {
   );
   
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+
+  const getSelectedColor = async () => {
+    try{
+      const corDocRef = doc(db, 'cores', 'SelectedColor');
+
+      const corSnap = await getDoc(corDocRef);
+
+      if(corSnap.exists()){
+        backgroundColor.value = corSnap.data().value;
+      } else{
+        console.log("Cor não encontrada no banco");
+      }
+    } catch(error){
+      console.log("Erro ao ler dado do Firebase - ", error);
+    }
+  };
 
   const pickImagesAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -53,11 +89,11 @@ export default function Index() {
     setIsModalVisible(false);
   }
 
-  const backgroundColor = useSharedValue("white");
-
   const animatedStyles = useAnimatedStyle(() => ({
     backgroundColor: withTiming(backgroundColor.value, { duration: 400 }),
   }));
+
+  getSelectedColor();
 
   return (
     <Animated.View style= {[styles.container, animatedStyles]}>
@@ -75,6 +111,11 @@ export default function Index() {
           onPress={onModalOpen}
           label="Cheque sua lista"/>
       </View>
+      <ModalMenu isVisible={isModalVisible} onClose={onModalClose}>
+        <View>
+          <DropdownComponent data={data} saveAt="SelectedColor" onChoose={getSelectedColor}></DropdownComponent>
+        </View>
+      </ModalMenu>
     </Animated.View>
   );
 }
